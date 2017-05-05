@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<body>
+<div ng-app="app" class="container">
+  
+  <p>Demo of AngularJS Numbers Only Directive</p>
+  
+  <p>Input below will accept only numbers.</p>
+
+  <p><input type="text" ng-model="info.val" numbers-only class="form-control" /></p>
+      
+  
+</div>
+
+<script>
+var app = angular.module('app', []);
+
+app.directive('numbersOnly', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                if (text) {
+                    var transformedInput = text.replace(/[^0-9]/g, '');
+
+                    if (transformedInput !== text) {
+                        ngModelCtrl.$setViewValue(transformedInput);
+                        ngModelCtrl.$render();
+                    }
+                    return transformedInput;
+                }
+                return undefined;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+</script>
+</body>
+</html>
